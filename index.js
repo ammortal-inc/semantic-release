@@ -172,11 +172,11 @@ async function run(context, plugins) {
   context.commits = await getCommits(context);
 
   const nextRelease = {
-    type: await plugins.analyzeCommits(context),
+    info: await plugins.analyzeCommits(context),
     channel: context.branch.channel || null,
     gitHead: await getGitHead({ cwd, env }),
   };
-  if (!nextRelease.type) {
+  if (!nextRelease.info.type) {
     logger.log("There are no relevant changes, so no new version is released.");
     return context.releases.length > 0 ? { releases: context.releases } : false;
   }
@@ -190,7 +190,7 @@ async function run(context, plugins) {
     throw getError("EINVALIDNEXTVERSION", {
       ...context,
       validBranches: context.branches.filter(
-        ({ type, accept }) => type !== "prerelease" && accept.includes(nextRelease.type)
+        ({ type, accept }) => type !== "prerelease" && accept.includes(nextRelease.info.type)
       ),
     });
   }
