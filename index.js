@@ -176,6 +176,7 @@ async function run(context, plugins) {
     channel: context.branch.channel || null,
     gitHead: await getGitHead({ cwd, env }),
   };
+  logger.log("Next Release Printout:", nextRelease, nextRelease.info, nextRelease.info.type);
   if (!nextRelease.info.type) {
     logger.log("There are no relevant changes, so no new version is released.");
     return context.releases.length > 0 ? { releases: context.releases } : false;
